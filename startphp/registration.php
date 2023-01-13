@@ -3,18 +3,24 @@
 require_once 'conn.php';
 
 if ($_SERVER["REQUEST_METHOD"] == 'POST') {
-    $us = $_POST['username'];
+    $user = $_POST['username'];
     $email = $_POST['email'];
     $fn = $_POST['fullname'];
     $password = $_POST['password'];
     $rpassword = $_POST['repassword'];
 
-    $checkonce = mysqli_query($conn, "SELECT * FROM register_login WHERE username = '$us'");
+
+    echo $us;
+    echo $email;
+    echo $password;
+    echo $rpassword;
+
+    $checkonce = mysqli_query($conn, "SELECT * FROM register_login WHERE username = '$user'");
     if (mysqli_num_rows($checkonce) > 0) {
         echo "<script>alert('Username or Email already Taken');</script>";
     } else {
         if ($password === $rpassword) {
-            $sql = "INSERT INTO register_login  VALUES ('','$us', '$email', '$fn', '$password')";
+            $sql = "INSERT INTO register_login  VALUES ('$user', '$email', '$fn', '$password')";
             $result = mysqli_query($conn, $sql);
             if ($result) {
                 echo "<script> alert('Registration Completed');</script>";
@@ -28,28 +34,16 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST') {
 
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register Page</title>
-
-    <style>
-        body {
-            text-align: center;
-            margin: 10% auto;
-        }
-    </style>
-
+    <title>Document</title>
 </head>
-
 <body>
-
-
+    
     <h1>Register Form</h1>
 
     <form action="registration.php" method="post">
@@ -74,5 +68,4 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST') {
 
     <a href="login.php">Login</a>
 </body>
-
 </html>

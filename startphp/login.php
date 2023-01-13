@@ -1,21 +1,26 @@
 <?php
+
 require_once 'conn.php';
 
-if(isset($_POST['submit'])) {
-    $us = $_POST['username'];
+if($_SERVER["REQUEST_METHOD"] == 'POST') {
+    $user = $_POST['username'];
     $passwd = $_POST['password'];
 
-    $sql = "SELECT * FROM register_login WHERE username = '$us'";
+    $sql = "SELECT * FROM `register_login` WHERE `username`='$user'; ";
     $result = mysqli_query($conn,$sql);
 
-    if ($result->num_rows > 0) {
+    if ($result->num_rows>0) {
+        echo "in";
         while($row = $result->fetch_assoc()) {
             $username = $row['username'];
             $password = $row['password'];
             if($passwd == $password ){
+                session_start();
                 $_SESSION['login'] = true;
-                $_SESSION['id'] = $row['id'];
-                echo "<script> alert('Login Successful');</script>";
+                $_SESSION['user'] = $user;
+                
+                // echo "<script> alert('Login Successful');</script>";
+                header('location: index.php'); 
             }
             else {
                 echo "<script> alert('Incorrect Password');</script>";
@@ -60,7 +65,7 @@ if(isset($_POST['submit'])) {
         <input type="password" name="password" required><br>
 
 
-        <input type="submit" value="Login">
+        <input type="submit" name="submit" value="Login">
         <input type="reset"  value="reset">
     </form><br>
     <a href="registration.php">Register</a>
